@@ -1,2 +1,3 @@
 ++HW01(CI-CD)
 base commit
+ADD GitHub Actions configuration template
