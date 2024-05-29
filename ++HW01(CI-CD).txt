@@ -1,4 +1,5 @@
 ++HW01(CI-CD)
 base commit
 ADD GitHub Actions configuration template
-test change
+CHANGE GitHub Actions configuration template
+Add first release without tests
