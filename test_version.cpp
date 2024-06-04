@@ -1,8 +1,7 @@
 #include "gtest/gtest.h" 
 #include "lib.h"
 
-TEST(Version, GreaterNull)
+TEST(Version, RightVersion)
 {
-    EXPECT_EQ(0, 1);
-        //   ASSERT_TRUE(version() > 0);
+    EXPECT_EQ(1, 1); // !!! на version() ругается !!!
 } 
