@@ -1,11 +1,22 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.5)
 
 set(PATCH_VERSION "1" CACHE INTERNAL "Patch version")
 set(PROJECT_VERSION 0.0.${PATCH_VERSION})
 
 project(helloworld VERSION ${PROJECT_VERSION})
 
-find_package(Boost COMPONENTS unit_test_framework REQUIRED)
+set(CMAKE_CXX_STANDARD 17)
+set(CXX_STANDARD_REQUIRED TRUE)
+
+include(FetchContent)
+FetchContent_Declare(
+  googletest
+  URL https://github.com/google/googletest/archive/609281088cfefc76f9d0ce82e1ff6c30cc3591e5.zip
+)
+
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
+
 
 configure_file(version.h.in version.h)
 
@@ -20,18 +31,24 @@ set_target_properties(helloworld_cli helloworld test_version PROPERTIES
 target_include_directories(helloworld
     PRIVATE "${CMAKE_BINARY_DIR}"
 )
-set_target_properties(test_version PROPERTIES
-    COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK
-    INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR}
-)
 
-target_link_libraries(helloworld_cli PRIVATE
-    helloworld
-)
-target_link_libraries(test_version
-    ${Boost_LIBRARIES}
-    helloworld
-)
+target_include_directories(test_version PUBLIC ${CMAKE_SOURCE_DIR})
+# set_target_properties(test_version PROPERTIES
+#     COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK
+#     INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR}
+# )
+set_target_properties(test_version PROPERTIES
+CXX_STANDARD 17
+CXX_STANDARD_REQUIRED ON
+)    
+
+target_link_libraries(helloworld_cli PRIVATE helloworld)
+# target_link_libraries(test_version
+#     ${Boost_LIBRARIES}
+#     helloworld
+# )
+# target_link_libraries(test_version PUBLIC gtest gtest_main)
+target_link_libraries(test_version PUBLIC gtest gtest_main)
 
 if (MSVC)
     target_compile_options(helloworld_cli PRIVATE
