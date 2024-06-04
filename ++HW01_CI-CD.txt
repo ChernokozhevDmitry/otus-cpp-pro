@@ -1,6 +1,0 @@
-++HW01(CI-CD)
-base commit
-ADD GitHub Actions configuration template
-CHANGE GitHub Actions configuration template
-Add first release without tests
-Push from homecomp
