@@ -3,5 +3,5 @@
 
 TEST(Version, RightVersion)
 {
-    EXPECT_EQ(1, 1); // !!! на version() ругается !!!
+    EXPECT_EQ(1, 0); // !!! на version() ругается !!!
 } 
