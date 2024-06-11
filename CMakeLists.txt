@@ -7,6 +7,7 @@ project(helloworld VERSION ${PROJECT_VERSION})
 
 set(CMAKE_CXX_STANDARD 17)
 set(CXX_STANDARD_REQUIRED TRUE)
+set(INSTALL_GTEST OFF)
 
 include(FetchContent)
 FetchContent_Declare(
