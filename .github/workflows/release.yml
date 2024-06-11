@@ -13,7 +13,7 @@ jobs:
           submodules: true
       - run: cmake . -DPATCH_VERSION=${{ github.run_number }} 
       - run: cmake --build .
-      - run: cmake --build . --target test -DBUILD_WITH_TEST=ON
+      - run: cmake --build . --target test -BUILD_WITH_TESTS=ON
       - run: cmake --build . --target package
       - name: Create Release
         id: create_release
