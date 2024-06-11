@@ -8,7 +8,7 @@ project(helloworld VERSION ${PROJECT_VERSION})
 set(CMAKE_CXX_STANDARD 17)
 set(CXX_STANDARD_REQUIRED TRUE)
 
-option(BUILD_WITH_TESTS "Build with tests" OFF)
+option(BUILD_WITH_TESTS "Build with tests" ON)
 
 if(BUILD_WITH_TESTS)
     include(FetchContent)
