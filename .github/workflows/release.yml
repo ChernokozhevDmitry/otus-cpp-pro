@@ -1,4 +1,4 @@
-name: 'HW01_CI-CD-gtest'
+name: 'HW02_ip_filter'
 
 on:
   push:

@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.15)
 set(PATCH_VERSION "1" CACHE INTERNAL "Patch version")
 set(PROJECT_VERSION 0.0.${PATCH_VERSION})
 
-project(helloworld VERSION ${PROJECT_VERSION})
+project(ip_filter VERSION ${PROJECT_VERSION})
 
 set(CMAKE_CXX_STANDARD 17)
 set(CXX_STANDARD_REQUIRED TRUE)
@@ -21,54 +21,42 @@ if(BUILD_WITH_TESTS)
     set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
     set(INSTALL_GMOCK OFF CACHE BOOL "" FORCE)
     FetchContent_MakeAvailable(googletest)
-    add_executable(test_version test_version.cpp)
-    target_include_directories(test_version PUBLIC ${CMAKE_SOURCE_DIR})
-    set_target_properties(test_version PROPERTIES
+    add_executable(tests tests.cpp)
+    target_include_directories(tests PUBLIC ${CMAKE_SOURCE_DIR})
+    set_target_properties(tests PROPERTIES
         CXX_STANDARD 17
         CXX_STANDARD_REQUIRED ON
     )    
-    target_link_libraries(test_version PUBLIC gtest gtest_main)    
+    target_link_libraries(tests PUBLIC gtest gtest_main)    
 endif()
 
 
 configure_file(version.h.in version.h)
 
-add_executable(helloworld_cli main.cpp)
-add_library(helloworld lib.cpp)
+add_executable(ip_filter ip_filter.cpp)
 
-# set_target_properties(helloworld_cli helloworld test_version PROPERTIES
-set_target_properties(helloworld_cli helloworld PROPERTIES
+# set_target_properties(helloworld_cli helloworld tests PROPERTIES
+set_target_properties(ip_filter PROPERTIES
 CXX_STANDARD 14
     CXX_STANDARD_REQUIRED ON
 )
-target_include_directories(helloworld
-    PRIVATE "${CMAKE_BINARY_DIR}"
-)
-
-target_link_libraries(helloworld_cli PRIVATE helloworld)
 
 if (MSVC)
-    target_compile_options(helloworld_cli PRIVATE
-        /W4
-    )
-    target_compile_options(helloworld PRIVATE
+    target_compile_options(ip_filter PRIVATE
         /W4
     )
     if(BUILD_WITH_TESTS)
-        target_compile_options(test_version PRIVATE
+        target_compile_options(tests PRIVATE
             /W4
         )
     endif()
 
 else ()
-    target_compile_options(helloworld_cli PRIVATE
-        -Wall -Wextra -pedantic -Werror
-    )
-    target_compile_options(helloworld PRIVATE
+    target_compile_options(ip_filter PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
     if(BUILD_WITH_TESTS)
-        target_compile_options(test_version PRIVATE
+        target_compile_options(tests PRIVATE
             -Wall -Wextra -pedantic -Werror
         )
     endif()
@@ -76,7 +64,7 @@ endif()
 
 
 
-install(TARGETS helloworld_cli RUNTIME DESTINATION bin)
+install(TARGETS ip_filter RUNTIME DESTINATION bin)
 
 set(CPACK_GENERATOR DEB)
 
@@ -90,5 +78,5 @@ include(CPack)
 
 if(BUILD_WITH_TESTS)
     enable_testing()
-    add_test(test_version test_version)
+    add_test(tests tests)
 endif()
