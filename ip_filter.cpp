@@ -2,128 +2,117 @@
 #include <cstdlib>
 #include <iostream>
 #include <string>
+#include <sstream>
 #include <vector>
+#include <array>
+#include <fstream>
+#include <algorithm> 
 
-// ("",  '.') -> [""]
-// ("11", '.') -> ["11"]
-// ("..", '.') -> ["", "", ""]
-// ("11.", '.') -> ["11", ""]
-// (".11", '.') -> ["", "11"]
-// ("11.22", '.') -> ["11", "22"]
-std::vector<std::string> split(const std::string &str, char d)
-{
-    std::vector<std::string> r;
+// тип  октетов для удобства 
+using ip_addr_type = std::vector<int>;
 
+// не тронута с учебного примера, только октеты храним string на int 
+ip_addr_type split(const std::string &str, char d){
+    ip_addr_type r;
     std::string::size_type start = 0;
     std::string::size_type stop = str.find_first_of(d);
-    while(stop != std::string::npos)
-    {
-        r.push_back(str.substr(start, stop - start));
-
+    while(stop != std::string::npos){
+        r.push_back(std::stoi(str.substr(start, stop - start)));
         start = stop + 1;
         stop = str.find_first_of(d, start);
     }
-
-    r.push_back(str.substr(start));
-
+    r.push_back(std::stoi(str.substr(start)));
     return r;
 }
 
-int main(int argc, char const *argv[])
-{
-    try
-    {
-        std::vector<std::vector<std::string> > ip_pool;
-
-        for(std::string line; std::getline(std::cin, line);)
-        {
-            std::vector<std::string> v = split(line, '\t');
-            ip_pool.push_back(split(v.at(0), '.'));
+ 
+// TODO попробовать как-то так разобраться template <typename ... Args>, чтобы не тянуть массив, хотя через args будет только строгий порядок 
+std::vector<ip_addr_type> filter(const std::vector<ip_addr_type>& vec, const std::array<int, 4>& ip_filter_data){
+    std::vector<ip_addr_type> result;
+    for (const auto& v :vec) {
+        bool flag = true;
+        for (int i = 0; i < v.size(); ++i){
+            if ((v[i] != ip_filter_data[i])&&(ip_filter_data[i] >= 0)){
+                flag = false;
+                break;
+            }
         }
+        if (flag) {
+            result.push_back(v);
+        }
+    }    
+    return result;         
+}
+
+std::vector<ip_addr_type> filter_any(const std::vector<ip_addr_type>& vec, int ip_filter_data){
+    std::vector<ip_addr_type> result;
+    for (const auto& v :vec) {
+        if (std::any_of(v.begin(), v.end(),
+                        [&ip_filter_data](const auto& ip_value ) {return ip_filter_data == ip_value;})){
+            result.push_back(v);
+        }
+    }    
+    return result;         
+}
+
+std::string print_ip_as_str(const ip_addr_type& v){
+    std::string result = "";
+    for (std::vector<int>::const_iterator c_it = v.cbegin(); c_it != v.cend(); ++c_it){
+        if (c_it != v.cbegin()) {
+            result+= '.';    
+        }
+        result+= std::to_string(*c_it);
+    }
+    return result;
+}
+
+std::ostream& operator << (std::ostream& os, const std::vector<ip_addr_type>& vec){
+    for (const auto& v : vec){
+        os << print_ip_as_str(v) << '\n';
+    }
+    return os;
+}
+
+int main(int argc, char const *argv[]){
+    try {
+        std::string filename = argv[1];
+		std::ifstream file(filename);
+		if (!file.is_open()) {
+			std::cerr << "Could not open file for reading: " << filename << std::endl;
+			return 0;
+		}
+        std::vector<ip_addr_type> ip_pool;
+// не сплитуем всю строку, а сразу IP, остальное до \n пропускаем
+        for(std::string line; std::getline(file, line, '\t');){
+            ip_pool.push_back(split(line, '.'));
+            std::getline(file, line, '\n');
+        } 
 
         // TODO reverse lexicographically sort
+        std::sort(ip_pool.begin(), ip_pool.end(),
+                    [](const auto& lhs, const auto& rhs) -> bool {
+                        for (int i = 0; i < lhs.size(); i++) {
+                            if (lhs.at(i) != rhs.at(i)) {
+                                return lhs.at(i) > rhs.at(i);
+                            }
+                        }
+                        return false;
+                        });
 
-        for(std::vector<std::vector<std::string> >::const_iterator ip = ip_pool.cbegin(); ip != ip_pool.cend(); ++ip)
-        {
-            for(std::vector<std::string>::const_iterator ip_part = ip->cbegin(); ip_part != ip->cend(); ++ip_part)
-            {
-                if (ip_part != ip->cbegin())
-                {
-                    std::cout << ".";
-
-                }
-                std::cout << *ip_part;
-            }
-            std::cout << std::endl;
-        }
-
-        // 222.173.235.246
-        // 222.130.177.64
-        // 222.82.198.61
-        // ...
-        // 1.70.44.170
-        // 1.29.168.152
-        // 1.1.234.8
+        std::cout << ip_pool;
 
         // TODO filter by first byte and output
-        // ip = filter(1)
-
-        // 1.231.69.33
-        // 1.87.203.225
-        // 1.70.44.170
-        // 1.29.168.152
-        // 1.1.234.8
+        std::cout << filter(ip_pool, {1, -1, -1, -1});
 
         // TODO filter by first and second bytes and output
-        // ip = filter(46, 70)
-
-        // 46.70.225.39
-        // 46.70.147.26
-        // 46.70.113.73
-        // 46.70.29.76
+        std::cout << filter(ip_pool, {46, 70, -1, -1});
 
         // TODO filter by any byte and output
-        // ip = filter_any(46)
-
-        // 186.204.34.46
-        // 186.46.222.194
-        // 185.46.87.231
-        // 185.46.86.132
-        // 185.46.86.131
-        // 185.46.86.131
-        // 185.46.86.22
-        // 185.46.85.204
-        // 185.46.85.78
-        // 68.46.218.208
-        // 46.251.197.23
-        // 46.223.254.56
-        // 46.223.254.56
-        // 46.182.19.219
-        // 46.161.63.66
-        // 46.161.61.51
-        // 46.161.60.92
-        // 46.161.60.35
-        // 46.161.58.202
-        // 46.161.56.241
-        // 46.161.56.203
-        // 46.161.56.174
-        // 46.161.56.106
-        // 46.161.56.106
-        // 46.101.163.119
-        // 46.101.127.145
-        // 46.70.225.39
-        // 46.70.147.26
-        // 46.70.113.73
-        // 46.70.29.76
-        // 46.55.46.98
-        // 46.49.43.85
-        // 39.46.86.85
-        // 5.189.203.46
+        std::cout << filter_any(ip_pool, 46);
     }
     catch(const std::exception &e)
     {
         std::cerr << e.what() << std::endl;
     }
-
     return 0;
 }
