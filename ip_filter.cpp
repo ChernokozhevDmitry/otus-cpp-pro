@@ -31,7 +31,7 @@ std::vector<ip_addr_type> filter(const std::vector<ip_addr_type>& vec, const std
     std::vector<ip_addr_type> result;
     for (const auto& v :vec) {
         bool flag = true;
-        for (int i = 0; i < v.size(); ++i){
+        for (auto i = 0; i < v.size(); ++i){
             if ((v[i] != ip_filter_data[i])&&(ip_filter_data[i] >= 0)){
                 flag = false;
                 break;
