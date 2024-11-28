@@ -73,7 +73,7 @@ std::ostream& operator << (std::ostream& os, const std::vector<ip_addr_type>& ve
     return os;
 }
 
-int main(int argc, char const *argv[]){
+int main(int, char const *argv[]){
     try {
         std::string filename = argv[1];
 		std::ifstream file(filename);
