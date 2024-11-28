@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.15)
 set(PATCH_VERSION "1" CACHE INTERNAL "Patch version")
 set(PROJECT_VERSION 0.0.${PATCH_VERSION})
 
-project(02HW-ip_filter VERSION ${PROJECT_VERSION})
+project(ip_filter VERSION ${PROJECT_VERSION})
 
 set(CMAKE_CXX_STANDARD 17)
 set(CXX_STANDARD_REQUIRED TRUE)
@@ -33,7 +33,7 @@ endif()
 
 configure_file(version.h.in version.h)
 
-add_executable(ip_filt--er ip_filter.cpp)
+add_executable(ip_filter ip_filter.cpp)
 
 # set_target_properties(helloworld_cli helloworld test_version PROPERTIES
 set_target_properties(ip_filter PROPERTIES
