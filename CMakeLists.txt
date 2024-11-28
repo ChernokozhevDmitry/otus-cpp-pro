@@ -33,7 +33,7 @@ endif()
 
 configure_file(version.h.in version.h)
 
-add_executable(ip_filter ip_filter.cpp)
+add_executable(ip_filt--er ip_filter.cpp)
 
 # set_target_properties(helloworld_cli helloworld test_version PROPERTIES
 set_target_properties(ip_filter PROPERTIES
