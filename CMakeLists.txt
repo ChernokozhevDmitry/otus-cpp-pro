@@ -33,26 +33,26 @@ endif()
 
 configure_file(version.h.in version.h)
 
-add_executableip_filter ip_filter.cpp)
+add_executable(ip_filter ip_filter.cpp)
 
 # set_target_properties(helloworld_cli helloworld test_version PROPERTIES
-set_target_properties(helloworld_cli helloworld PROPERTIES
+set_target_properties(ip_filter PROPERTIES
 CXX_STANDARD 14
     CXX_STANDARD_REQUIRED ON
 )
-target_include_directories(helloworld
-    PRIVATE "${CMAKE_BINARY_DIR}"
-)
+#target_include_directories(ip_filter
+#    PRIVATE "${CMAKE_BINARY_DIR}"
+#)
 
-target_link_libraries(helloworld_cli PRIVATE helloworld)
+#target_link_libraries(helloworld_cli PRIVATE helloworld)
 
 if (MSVC)
-    target_compile_options(helloworld_cli PRIVATE
+    target_compile_options(ip_filter PRIVATE
         /W4
     )
-    target_compile_options(helloworld PRIVATE
-        /W4
-    )
+    # target_compile_options(helloworld PRIVATE
+    #     /W4
+    # )
     if(BUILD_WITH_TESTS)
         target_compile_options(test_version PRIVATE
             /W4
@@ -60,12 +60,12 @@ if (MSVC)
     endif()
 
 else ()
-    target_compile_options(helloworld_cli PRIVATE
+    target_compile_options(ip_filter PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
-    target_compile_options(helloworld PRIVATE
-        -Wall -Wextra -pedantic -Werror
-    )
+    # target_compile_options(helloworld PRIVATE
+    #     -Wall -Wextra -pedantic -Werror
+    # )
     if(BUILD_WITH_TESTS)
         target_compile_options(test_version PRIVATE
             -Wall -Wextra -pedantic -Werror
@@ -75,7 +75,7 @@ endif()
 
 
 
-install(TARGETS helloworld_cli RUNTIME DESTINATION bin)
+install(TARGETS ip_filter RUNTIME DESTINATION bin)
 
 set(CPACK_GENERATOR DEB)
 
