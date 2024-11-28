@@ -95,15 +95,15 @@ int main(int, char const *argv[]){
         } 
 
         // TODO reverse lexicographically sort
-        // std::sort(ip_pool.begin(), ip_pool.end(),
-        //             [](const auto& lhs, const auto& rhs) -> bool {
-        //                 for (int i = 0; i < lhs.size(); i++) {
-        //                     if (lhs.at(i) != rhs.at(i)) {
-        //                         return lhs.at(i) > rhs.at(i);
-        //                     }
-        //                 }
-        //                 return false;
-        //                 });
+        std::sort(ip_pool.begin(), ip_pool.end(),
+                    [](const auto& lhs, const auto& rhs) -> bool {
+                        for (size_t i = 0; i < lhs.size(); i++) {
+                            if (lhs.at(i) != rhs.at(i)) {
+                                return lhs.at(i) > rhs.at(i);
+                            }
+                        }
+                        return false;
+                        });
 
         std::cout << ip_pool;
 
