@@ -31,11 +31,15 @@ std::vector<ip_addr_type> filter(const std::vector<ip_addr_type>& vec, const std
     std::vector<ip_addr_type> result;
     for (const auto& v :vec) {
         bool flag = true;
-        for (auto i = 0; i < v.size(); ++i){
-            if ((v[i] != ip_filter_data[i])&&(ip_filter_data[i] >= 0)){
+// TODO не собирался так for(int i; i < v.size(); ++i): ip_filter.cpp:34:28: error: comparison of integer expressions of different signedness:
+// ‘int’ and ‘std::vector<int>::size_type’ {aka ‘long unsigned int’} [-Werror=sign-compare]
+        int hack = 0;
+        for (std::vector<int>::const_iterator c_it = v.cbegin(); c_it != v.cend(); ++c_it){
+            if ((*c_it != ip_filter_data[hack])&&(ip_filter_data[hack] >= 0)){
                 flag = false;
                 break;
             }
+            ++hack;
         }
         if (flag) {
             result.push_back(v);
