@@ -42,11 +42,11 @@ CXX_STANDARD 14
 
 if (MSVC)
     target_compile_options(ip_filter PRIVATE
-        /W4
+        /W4 /WX
     )
     if(BUILD_WITH_TESTS)
         target_compile_options(test_version PRIVATE
-            /W4
+            /W4 /WX
         )
     endif()
 
