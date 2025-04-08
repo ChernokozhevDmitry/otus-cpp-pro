@@ -1,4 +1,0 @@
-++HW02_ip-filter
-возобновляем работу, тестим Git
-without gtest
-with gtest (not operator <<, lambda reverse lexicographically sort)
