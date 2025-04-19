@@ -28,26 +28,18 @@ void print_ip_impl(const std::string& value) {
 }
 
 // for std::vector (work since cpp11++)
-template<typename T>
-void print_ip_impl(const std::vector<T>& vec) {
-    for (size_t i = 0; i < vec.size(); ++i) {
-        std::cout << vec[i];
-        if (i < vec.size() - 1) {
-            std::cout << ".";
-        }
-    }
-    std::cout << std::endl;
-}
-
-// for std::list (work since cpp11++)
-template<typename T>
-void print_ip_impl(const std::list<T>& lst) {
-    for (auto it = lst.begin(); it != lst.end(); ) {
+// Объединенная функция с SFINAE
+template<typename T, typename = typename std::enable_if<
+    std::is_same<T, std::vector<typename T::value_type>>::value ||
+    std::is_same<T, std::list<typename T::value_type>>::value>::type>
+void print_ip_impl(const T& container) {
+    auto it = container.begin();
+    if (it != container.end()) {
         std::cout << *it;
         ++it;
-        if (it != lst.end()) {
-            std::cout << ".";
-        }
+    }
+    for (; it != container.end(); ++it) {
+        std::cout << "." << *it;
     }
     std::cout << std::endl;
 }
