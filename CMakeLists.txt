@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.15)
 set(PATCH_VERSION "1" CACHE INTERNAL "Patch version")
 set(PROJECT_VERSION 0.0.${PATCH_VERSION})
 
-project(print_ip VERSION ${PROJECT_VERSION})
+project(matrix.cpp VERSION ${PROJECT_VERSION})
 
 set(CMAKE_CXX_STANDARD 14)
 set(CXX_STANDARD_REQUIRED TRUE)
@@ -33,10 +33,10 @@ endif()
 
 configure_file(version.h.in version.h)
 
-add_executable(print_ip print_ip.cpp)
+add_executable(matrix.cpp matrix.cpp)
 
 # set_target_properties(helloworld_cli helloworld test_version PROPERTIES
-set_target_properties(print_ip PROPERTIES
+set_target_properties(matrix.cpp PROPERTIES
 CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
 )
@@ -47,7 +47,7 @@ CXX_STANDARD 17
 #target_link_libraries(helloworld_cli PRIVATE helloworld)
 
 if (MSVC)
-    target_compile_options(print_ip PRIVATE
+    target_compile_options(matrix.cpp PRIVATE
         /W4
     )
     # target_compile_options(helloworld PRIVATE
@@ -60,7 +60,7 @@ if (MSVC)
     endif()
 
 else ()
-    target_compile_options(print_ip PRIVATE
+    target_compile_options(matrix.cpp PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
     # target_compile_options(helloworld PRIVATE
@@ -75,7 +75,7 @@ endif()
 
 
 
-install(TARGETS print_ip RUNTIME DESTINATION bin)
+install(TARGETS matrix.cpp RUNTIME DESTINATION bin)
 
 set(CPACK_GENERATOR DEB)
 
