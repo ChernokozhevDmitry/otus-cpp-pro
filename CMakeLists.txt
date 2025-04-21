@@ -33,10 +33,10 @@ endif()
 
 configure_file(version.h.in version.h)
 
-add_executable(matrix.cpp matrix.cpp)
+add_executable(matrix matrix.cpp)
 
 # set_target_properties(helloworld_cli helloworld test_version PROPERTIES
-set_target_properties(matrix.cpp PROPERTIES
+set_target_properties(matrix PROPERTIES
 CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
 )
@@ -47,7 +47,7 @@ CXX_STANDARD 17
 #target_link_libraries(helloworld_cli PRIVATE helloworld)
 
 if (MSVC)
-    target_compile_options(matrix.cpp PRIVATE
+    target_compile_options(matrix PRIVATE
         /W4
     )
     # target_compile_options(helloworld PRIVATE
@@ -75,7 +75,7 @@ endif()
 
 
 
-install(TARGETS matrix.cpp RUNTIME DESTINATION bin)
+install(TARGETS matrix RUNTIME DESTINATION bin)
 
 set(CPACK_GENERATOR DEB)
 
