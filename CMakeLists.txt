@@ -40,7 +40,7 @@ set_target_properties(bulk PROPERTIES
 CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
 )
-#target_include_directories(ip_filter
+#target_include_directories(bulk
 #    PRIVATE "${CMAKE_BINARY_DIR}"
 #)
 
