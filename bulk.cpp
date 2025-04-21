@@ -10,13 +10,13 @@
 class ICommandHandler {
 public:
     virtual ~ICommandHandler() = default;
-    virtual void handleCommands(const std::vector<std::string>& commands, const std::time_t timestamp) = 0;
+    virtual void handleCommands(const std::vector<std::string>& commands) = 0;
 };
 
 /// \brief Класс для вывода команд в консоль
 class PrintCommandHandler : public ICommandHandler {
 public:
-    void handleCommands(const std::vector<std::string>& commands, const std::time_t timestamp) override {
+    void handleCommands(const std::vector<std::string>& commands) override {
         for (size_t i = 0; i < commands.size(); ++i) {
             std::cout << commands[i];
             if (i != commands.size() - 1) std::cout << ", ";
@@ -28,9 +28,12 @@ public:
 /// \brief Класс для сохранения команд в файл
 class FileCommandHandler : public ICommandHandler {
 public:
-    void handleCommands(const std::vector<std::string>& commands, const std::time_t timestamp) override {
+    void handleCommands(const std::vector<std::string>& commands) override {
         std::ostringstream filename;
-        filename << "bulk" << timestamp << ".log";
+//        const std::time_t timestamp;
+//        std::time(nullptr)
+
+        filename << "bulk" << std::time(nullptr) << ".log";
 
         std::ofstream outFile(filename.str());
         if (outFile) {
@@ -68,7 +71,7 @@ public:
                     if (!commands.empty()) {
                         // Выводим предыдущие команды 
                         for (const auto& handler : handlers) {
-                            handler->handleCommands(commands, std::time(nullptr));
+                            handler->handleCommands(commands);
                         }
                         commands.clear();
                     }
@@ -87,7 +90,7 @@ public:
             // Проверка если достигли размера блока
             if (!inDynamicBlock && commands.size() == blockSize) {
                 for (const auto& handler : handlers) {
-                    handler->handleCommands(commands, std::time(nullptr));
+                    handler->handleCommands(commands);
                 }
                 commands.clear(); // Очищаем список после обработки
             }
@@ -96,7 +99,7 @@ public:
         // Обработка оставшихся команд, если они есть
         if (!commands.empty() && !inDynamicBlock) {
             for (const auto& handler : handlers) {
-                handler->handleCommands(commands, std::time(nullptr));
+                handler->handleCommands(commands);
             }
         }
     }
