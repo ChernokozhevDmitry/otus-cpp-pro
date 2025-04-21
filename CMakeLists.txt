@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.15)
 set(PATCH_VERSION "1" CACHE INTERNAL "Patch version")
 set(PROJECT_VERSION 0.0.${PATCH_VERSION})
 
-project(matrix.cpp VERSION ${PROJECT_VERSION})
+project(matrix VERSION ${PROJECT_VERSION})
 
 set(CMAKE_CXX_STANDARD 14)
 set(CXX_STANDARD_REQUIRED TRUE)
@@ -60,7 +60,7 @@ if (MSVC)
     endif()
 
 else ()
-    target_compile_options(matrix.cpp PRIVATE
+    target_compile_options(matrix PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
     # target_compile_options(helloworld PRIVATE
