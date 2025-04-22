@@ -106,7 +106,7 @@ public:
 
 private:
     std::vector<std::shared_ptr<ICommandHandler>> handlers;
-    int blockSize;
+    size_t blockSize;
 };
 
 int main(int argc, char* argv[]) {
